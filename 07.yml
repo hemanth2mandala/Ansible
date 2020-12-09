@@ -1,0 +1,56 @@
+---
+
+- hosts: our
+  become: yes
+  handlers:
+  - name: Restart HTTPD
+    service:
+      name: httpd
+      state: restarted
+
+  - name: Start HTTPD
+    service:
+      name: httpd
+      state: started
+      enabled: yes    
+
+  tasks:
+  
+  - name: SeLinux
+    selinux:
+      policy: targeted
+      state: permissive
+  
+
+
+  - name: Install HTTPD
+    package:
+      name: httpd
+      state: present
+    notify:
+       - Start HTTPD 
+
+  - name: Update Web page
+    copy:
+      src: /home/centos/playbooks/index.html
+      dest: /var/www/html/index.html 
+
+  - name: Update Apache port-8081
+    copy:
+      src: /home/centos/playbooks/httpd.conf
+      dest: /etc/httpd/conf/httpd.conf
+    notify:
+       - Restart HTTPD 
+
+  - name: Update PHP page
+    copy:
+      src: /home/centos/playbooks/date.php
+      dest: /var/www/html/date.php 
+
+  - name: Install PHP
+    package:
+      name: php
+      state: present
+    notify:
+       - Restart HTTPD
+...

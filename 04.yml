@@ -1,0 +1,24 @@
+---
+- hosts: our
+  become: yes
+  tasks:
+
+  - name: Install HTTPD
+    package:
+      name: httpd
+      state: present
+
+  - name: Start HTTPD
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+
+
+  - name: Update Web page
+    copy:
+      src: /home/centos/playbooks/index.html
+      dest: /var/www/html/index.html 
+
+...
+

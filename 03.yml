@@ -1,0 +1,33 @@
+---
+- hosts: my
+  become: yes 
+  tasks:
+  - name: Copy the code file
+    copy:
+      src: /home/centos/pom.xml
+      dest: /home/centos/application/
+
+  - name: Download file
+    get_url:
+      url: https://raw.githubusercontent.com/hemanth2mandala/JavaCalculator/master/src/main/java/com/ravi/cal/RaviCalculator/Calculator.java 
+      dest: /home/centos/application/
+  
+  - name: Get wget
+    package:
+      name: wget
+      state: present
+
+- hosts: our
+  become: yes
+  tasks:
+  - name: Copy the code file
+    copy:
+      src: /home/centos/pom.xml
+      dest: /home/centos/application/
+  
+  - name: Get wget
+    package:
+      name: wget
+      state: present
+...
+
